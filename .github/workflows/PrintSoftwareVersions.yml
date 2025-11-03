@@ -1,0 +1,38 @@
+name: Print Software Versions
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  # Перша робота: Перевірка версій для Рівня обробки даних (Node.js)
+  PrintBackendVersions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Print Node.js Version (Backend API)
+        # Виводимо версію Node.js, оскільки це основний компонент на рівні логіки
+        run: node --version
+      
+      - name: Print NPM Version
+        # Виводимо версію npm, оскільки Express.js керується через npm
+        run: npm --version
+
+  # Друга робота: Перевірка версій для Рівня доступу до даних (PostgreSQL)
+  PrintDBMSVersions:
+    runs-on: ubuntu-latest
+    # Залежність від першої роботи
+    needs: [PrintBackendVersions] 
+
+    steps:
+      - name: Install PostgreSQL client
+        # Встановлюємо клієнт PostgreSQL, оскільки його немає за замовчуванням у робочому оточенні
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+        
+      - name: Print PostgreSQL Version
+        # Виводимо версію psql, щоб підтвердити версію СКБД
+        run: psql --version
