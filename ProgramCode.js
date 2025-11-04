@@ -1,10 +1,8 @@
-const PROGRAM_NAME = 'Система створення скульптур';
+// ProgramCode.js
+// Простий приклад Node.js модуля
 
-/**
- * Основна функція, яка запускає виведення назви в термінал.
- */
-function displayProgramName() {
-  console.log(`Програмний продукт: ${PROGRAM_NAME}`);
+function main() {
+  console.log("Система створення скульптур — програмний продукт для моделювання 3D-об’єктів.");
 }
 
-displayProgramName();
+main();
