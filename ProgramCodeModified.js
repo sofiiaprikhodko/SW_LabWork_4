@@ -1,10 +1,7 @@
-// ProgramCode.js
-// Модуль для виведення назви програмного продукту
+const productName = "Система створення скульптур";
 
-function main() {
-  console.log(
-    "Система створення скульптур — програмний продукт для моделювання 3D-об'єктів.",
-  );
+function displayProductName() {
+  console.log(`Назва програмного продукту: ${productName}`);
 }
 
-main();
+displayProductName();
