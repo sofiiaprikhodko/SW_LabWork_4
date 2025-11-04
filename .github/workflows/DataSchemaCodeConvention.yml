@@ -1,26 +1,27 @@
-name: Javascript Code Linter
+name: SQL Linter
+
 on:
+  # Запуск при кожному push у репозиторій
   push:
     branches:
-      - main # Зазвичай використовують головну гілку для перевірки
+      - main 
 
 jobs:
-  JavascriptCodeLinter:
+  SQLLinter:
+    name: Перевірка норм кодування SQL-схеми даних
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout Code in Repository
-      uses: actions/checkout@v3
+      - name: Checkout Code in Repository
+        # Клонуємо репозиторій для роботи з файлами
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20' # Рекомендована версія
+      - name: Install SQLFluff Linter
+        # Встановлюємо інструмент перевірки SQL-коду (через pip)
+        run: |
+          pip install sqlfluff
 
-    - name: Install Biome Linter
-      # Biomejs (замість @bicmejs/biome у застарілому прикладі)
-      run: npm install --global @biomejs/biome
-
-    - name: Validate all js-files
-      # Припускаємо, що файл ProgramCode.js знаходиться у корені.
-      # Використовуємо 'check' для перевірки на відповідність нормам.
-      run: biome check ProgramCode.js
+      - name: Run SQL Linting for PostgreSQL
+        # Виконуємо перевірку синтаксису SQL з урахуванням діалекту PostgreSQL
+        run: |
+          sqlfluff lint $GITHUB_WORKSPACE/DataSchema.sql --dialect postgres
