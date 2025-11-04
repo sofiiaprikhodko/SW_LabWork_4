@@ -1,7 +1,7 @@
-function main() {
-    console.log(
-        "Система створення скульптур — програмний продукт для моделювання 3D-об’єктів.",
-    );
+const projectName = "Система створення скульптур";
+
+function displayProjectName() {
+    console.log(`Назва програмного продукту: "${projectName}"`);
 }
 
-main();
+displayProjectName();
