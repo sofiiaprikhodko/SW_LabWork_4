@@ -1,23 +1,33 @@
-name: JavaScript Code Linter
+name: Program Code Convention Check
 
 on:
   push:
-    branches:
-      - main  # або твоя гілка, якщо лабораторна у власній гілці
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  JavascriptCodeLinter:
-    name: Перевірка якості JS-коду
+  lint-javascript:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout Code in Repository
-        uses: actions/checkout@v4
-
-      - name: Install Biome (JavaScript Linter)
-        run: |
-          npm install --save-dev --save-exact @biomejs/biome
-
-      - name: Validate JS File
-        run: |
-          npx @biomejs/biome check ProgramCode.js
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install Biome linter
+      run: npm install --save-dev --save-exact @biomejs/biome
+      
+    - name: Run Biome linter
+      run: npx @biomejs/biome check ProgramCode.js
+      
+    - name: Verify code style
+      run: |
+        echo "Перевірка норм кодування завершена"
+        echo "Файл: ProgramCode.js"
+        echo "Статус: ${{ job.status }}"
