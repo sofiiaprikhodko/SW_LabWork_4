@@ -23,4 +23,4 @@ jobs:
     - name: Validate all js-files
       # Припускаємо, що файл ProgramCode.js знаходиться у корені.
       # Використовуємо 'check' для перевірки на відповідність нормам.
-      run: biome check ProgramCode.js
+      run: biome check ProgramCodeModified.js
