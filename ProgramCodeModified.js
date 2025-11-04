@@ -1,7 +1,10 @@
-const projectName = "Система створення скульптур";
+// ProgramCode.js
+// Модуль для виведення назви програмного продукту
 
-function displayProjectName() {
-    console.log(`Назва програмного продукту: "${projectName}"`);
+function main() {
+  console.log(
+    "Система створення скульптур — програмний продукт для моделювання 3D-об'єктів.",
+  );
 }
 
-displayProjectName();
+main();
