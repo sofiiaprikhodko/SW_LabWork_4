@@ -24,4 +24,4 @@ jobs:
       - name: Run SQL Linting for PostgreSQL
         # Виконуємо перевірку синтаксису SQL з урахуванням діалекту PostgreSQL
         run: |
-          sqlfluff lint $GITHUB_WORKSPACE/DataSchema.sql --dialect postgres
+          sqlfluff lint $GITHUB_WORKSPACE/DataSchemaModified.sql --dialect postgres
