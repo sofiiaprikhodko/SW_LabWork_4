@@ -1,4 +1,4 @@
-name: Program Code Convention Check
+name: JavaScript Code Convention Check
 
 on:
   push:
@@ -7,27 +7,20 @@ on:
     branches: [ main ]
 
 jobs:
-  lint-javascript:
+  lint:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+      - name: Checkout code
+        uses: actions/checkout@v4
         
-    - name: Install Biome linter
-      run: npm install --save-dev --save-exact @biomejs/biome
-      
-    - name: Run Biome linter
-      run: npx @biomejs/biome check ProgramCode.js
-      
-    - name: Verify code style
-      run: |
-        echo "Перевірка норм кодування завершена"
-        echo "Файл: ProgramCode.js"
-        echo "Статус: ${{ job.status }}"
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v1
+        with:
+          version: latest
+          
+      - name: Run linting on ProgramCode.js
+        run: biome check ProgramCode.js
+        
+      - name: Display success message
+        if: success()
+        run: echo "ProgramCodeModified.js відповідає нормам кодування"
