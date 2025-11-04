@@ -1,47 +1,26 @@
-name: JavaScript Code Quality Check
-
+name: Javascript Code Linter
 on:
   push:
     branches:
-      - main 
+      - main # Зазвичай використовують головну гілку для перевірки
 
 jobs:
-  JSLinter:
-    name: Перевірка норм кодування JavaScript
+  JavascriptCodeLinter:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout Code in Repository
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js Environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20' # Використовуємо LTS-версію Node.js
-          
-      - name: Install ESLint and Dependencies
-        # Встановлюємо ESLint та необхідні конфігурації глобально
-        run: npm install -g eslint eslint-config-airbnb-base eslint-plugin-import
-        
-      - name: Configure ESLint (Temporary config)
-        # Створюємо простий конфігураційний файл ESLint для перевірки
-        run: |
-          echo 'module.exports = {
-            extends: "airbnb-base",
-            parserOptions: {
-              ecmaVersion: 2020,
-              sourceType: "module",
-            },
-            rules: {
-              // Дозволяємо console.log для простого виведення
-              "no-console": "off", 
-              // Дозволяємо camelCase для назв функцій
-              "camelcase": "off", 
-              // Дозволяємо використання функції до її визначення
-              "no-use-before-define": "off", 
-            }
-          };' > .eslintrc.js
-          
-      - name: Run ESLint (Check ProgramCode.js)
-        # Виконуємо перевірку. || true дозволяє продовжити, навіть якщо є помилки (для Експерименту 1)
-        run: eslint ProgramCode.js || true
+    - name: Checkout Code in Repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20' # Рекомендована версія
+
+    - name: Install Biome Linter
+      # Biomejs (замість @bicmejs/biome у застарілому прикладі)
+      run: npm install --global @biomejs/biome
+
+    - name: Validate all js-files
+      # Припускаємо, що файл ProgramCode.js знаходиться у корені.
+      # Використовуємо 'check' для перевірки на відповідність нормам.
+      run: biome check ProgramCode.js
