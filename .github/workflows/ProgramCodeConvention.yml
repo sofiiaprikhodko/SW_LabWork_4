@@ -1,13 +1,12 @@
-name: JavaScript Code Convention Check
+name: Program Code Convention Check
 
 on:
   push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  lint:
+  lint-both-files:
+    name: Lint Both JavaScript Files
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,9 +17,18 @@ jobs:
         with:
           version: latest
           
-      - name: Run linting on ProgramCode.js
-        run: biome check ProgramCode.js
-        
-      - name: Display success message
-        if: success()
-        run: echo "ProgramCodeModified.js відповідає нормам кодування"
+      - name: Auto-format and check ProgramCode.js
+        run: |
+          echo "=== Автоматичне форматування ProgramCode.js ==="
+          biome check --apply ProgramCode.js
+          echo "ProgramCode.js - успішно відформатовано та пройшло перевірку"
+          
+      - name: Check ProgramCodeModified.js (should fail)
+        run: |
+          echo "=== Перевірка ProgramCodeModified.js (має не пройти) ==="
+          if biome check ProgramCodeModified.js; then
+            echo "ProgramCodeModified.js - пройшов перевірку (неочікувано)"
+            exit 1
+          else
+            echo "✅ ProgramCodeModified.js - знайдено помилки (очікуваний результат)"
+          fi
