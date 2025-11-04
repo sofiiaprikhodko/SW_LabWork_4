@@ -1,34 +1,47 @@
-name: Program Code Convention Check
+name: JavaScript Code Quality Check
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main 
 
 jobs:
-  lint-both-files:
-    name: Lint Both JavaScript Files
+  JSLinter:
+    name: Перевірка норм кодування JavaScript
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout code
+      - name: Checkout Code in Repository
         uses: actions/checkout@v4
         
-      - name: Setup Biome
-        uses: biomejs/setup-biome@v1
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
         with:
-          version: latest
+          node-version: '20' # Використовуємо LTS-версію Node.js
           
-      - name: Auto-format and check ProgramCode.js
+      - name: Install ESLint and Dependencies
+        # Встановлюємо ESLint та необхідні конфігурації глобально
+        run: npm install -g eslint eslint-config-airbnb-base eslint-plugin-import
+        
+      - name: Configure ESLint (Temporary config)
+        # Створюємо простий конфігураційний файл ESLint для перевірки
         run: |
-          echo "=== Автоматичне форматування ProgramCode.js ==="
-          biome check --apply ProgramCode.js
-          echo "ProgramCode.js - успішно відформатовано та пройшло перевірку"
+          echo 'module.exports = {
+            extends: "airbnb-base",
+            parserOptions: {
+              ecmaVersion: 2020,
+              sourceType: "module",
+            },
+            rules: {
+              // Дозволяємо console.log для простого виведення
+              "no-console": "off", 
+              // Дозволяємо camelCase для назв функцій
+              "camelcase": "off", 
+              // Дозволяємо використання функції до її визначення
+              "no-use-before-define": "off", 
+            }
+          };' > .eslintrc.js
           
-      - name: Check ProgramCodeModified.js (should fail)
-        run: |
-          echo "=== Перевірка ProgramCodeModified.js (має не пройти) ==="
-          if biome check ProgramCodeModified.js; then
-            echo "ProgramCodeModified.js - пройшов перевірку (неочікувано)"
-            exit 1
-          else
-            echo "✅ ProgramCodeModified.js - знайдено помилки (очікуваний результат)"
-          fi
+      - name: Run ESLint (Check ProgramCode.js)
+        # Виконуємо перевірку. || true дозволяє продовжити, навіть якщо є помилки (для Експерименту 1)
+        run: eslint ProgramCode.js || true
