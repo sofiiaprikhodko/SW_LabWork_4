@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v4
 
       - name: Print Node.js Version (Backend API)
         # Виводимо версію Node.js, оскільки це основний компонент на рівні логіки
